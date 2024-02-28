@@ -2,13 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Contact from "./Contact";
+import EditContact from "./EditContact";
 import ErrorPage from "./Error-page";
 import Root from "./Root";
 import "./index.css";
 import {
   createContactAction,
+  deleteContactAction,
+  getContactLoader,
   getContactsLoader,
-} from "./loaders/contactsLoader";
+  updateContactAction,
+} from "./loaders & actions/contactsLoader";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +23,26 @@ const router = createBrowserRouter([
     action: createContactAction,
     children: [
       {
+        index: true,
+        element: <h2> Hello this is the main page</h2>,
+      },
+      {
         path: "/contacts/:contactId",
         element: <Contact />,
+        loader: getContactLoader,
+      },
+      {
+        path: "/contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: getContactLoader,
+        action: updateContactAction,
+      },
+      {
+        path: "/contacts/:contactId/destroy",
+        action: deleteContactAction,
+        errorElement: (
+          <h3>Oops there was an error</h3>
+        ) /*contexual error for this  */,
       },
     ],
   },
